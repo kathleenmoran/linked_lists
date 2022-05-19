@@ -24,9 +24,7 @@ class LinkedList
     if @head.nil?
       @head = Node.new(value)
     else
-      cur = @head
-      cur = cur.next_node until cur.next_node.nil?
-      cur.next_node = Node.new(value)
+      tail.next_node = Node.new(value)
     end
     self
   end
@@ -67,5 +65,43 @@ class LinkedList
   end
 
   def pop
+    if head.nil? || head.next_node.nil?
+      @head = nil
+    else
+      prev = @head
+      cur = @head.next_node
+      until cur.next_node.nil?
+        prev = prev.next_node
+        cur = cur.next_node
+      end
+      prev.next_node = nil
+    end
+    self
+  end
 
+  def contains?(value)
+    unless @head.nil?
+      cur = @head
+      until cur.nil?
+        return true if cur.value == value
+
+        cur = cur.next_node
+      end
+    end
+    false
+  end
+
+  def find(value)
+    index = 0
+    unless @head.nil?
+      cur = @head
+      until cur.nil?
+        return index if cur.value == value
+
+        cur = cur.next_node
+        index += 1
+      end
+    end
+    nil
+  end
 end
