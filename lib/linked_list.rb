@@ -48,47 +48,34 @@ class LinkedList
     if @head.nil?
       @head
     else
-      cur = @head
-      cur = cur.next_node until cur.next_node.nil?
-      cur
+      at(size - 1)
     end
   end
 
   def at(index)
-    cur = @head
-    index.times do
-      break if cur.nil?
+    if index >= 0
+      cur = @head
+      index.times do
+        return cur if cur.nil?
 
-      cur = cur.next_node
+        cur = cur.next_node
+      end
+      return cur
     end
-    cur
+    nil
   end
 
   def pop
     if head.nil? || head.next_node.nil?
       @head = nil
     else
-      prev = @head
-      cur = @head.next_node
-      until cur.next_node.nil?
-        prev = prev.next_node
-        cur = cur.next_node
-      end
-      prev.next_node = nil
+      at(size - 2).next_node = nil
     end
     self
   end
 
   def contains?(value)
-    unless @head.nil?
-      cur = @head
-      until cur.nil?
-        return true if cur.value == value
-
-        cur = cur.next_node
-      end
-    end
-    false
+    !find(value).nil?
   end
 
   def find(value)
@@ -103,5 +90,29 @@ class LinkedList
       end
     end
     nil
+  end
+
+  def insert_at(value, index)
+    if index.between?(0, size)
+      if index.zero?
+        prepend(value)
+      elsif index == size
+        append(value)
+      else
+        at(index - 1).next_node = Node.new(value, at(index))
+      end
+    end
+    self
+  end
+
+  def remove_at(index)
+    if index.between?(0, size - 1)
+      if index.zero?
+        @head = @head.next_node
+      else
+        at(index - 1).next_node = index == size - 1 ? nil : at(index + 1)
+      end
+    end
+    self
   end
 end
